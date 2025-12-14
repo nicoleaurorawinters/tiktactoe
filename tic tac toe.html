@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tic Tac Toe Flowers</title>
+<style>
+    body {
+        background: #f4ffe9;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    h1 {
+        position: absolute;
+        top: 20px;
+        font-size: 35px;
+        color: #559955;
+    }
+
+    #game {
+        display: grid;
+        grid-template-columns: repeat(3, 120px);
+        grid-template-rows: repeat(3, 120px);
+        gap: 10px;
+    }
+
+    .cell {
+        width: 120px;
+        height: 120px;
+        font-size: 70px;
+        background: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        border-radius: 15px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        transition: transform .1s ease;
+    }
+
+    .cell:hover {
+        transform: scale(1.1);
+        background: #f5fff0;
+    }
+
+    #reset {
+        position: absolute;
+        bottom: 30px;
+        padding: 12px 25px;
+        font-size: 18px;
+        background: #78c87a;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    #reset:hover {
+        background: #6ab06c;
+    }
+</style>
+</head>
+<body>
+
+<h1>Tic Tac Toe 🌻</h1>
+
+<div id="game"></div>
+
+<button id="reset">Reset</button>
+
+<script>
+    const game = document.getElementById("game");
+    const resetBtn = document.getElementById("reset");
+
+    let currentPlayer = "🌻"; // Player 1 sunflower
+    let board = ["", "", "", "", "", "", "", "", ""];
+
+    // Create grid cells
+    for (let i = 0; i < 9; i++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.dataset.index = i;
+        cell.addEventListener("click", handleMove);
+        game.appendChild(cell);
+    }
+
+    function handleMove(e) {
+        const index = e.target.dataset.index;
+        if (board[index] !== "") return; // already used
+
+        board[index] = currentPlayer;
+        e.target.textContent = currentPlayer;
+
+        if (checkWin()) {
+            setTimeout(() => alert(currentPlayer + " wins! 🌼"), 100);
+            return;
+        }
+
+        if (board.every(cell => cell !== "")) {
+            setTimeout(() => alert("It's a draw! 🌸"), 100);
+            return;
+        }
+
+        // Switch turns
+        currentPlayer = currentPlayer === "🌻" ? "🌸" : "🌻";
+    }
+
+    function checkWin() {
+        const winPatterns = [
+            [0,1,2],[3,4,5],[6,7,8],
+            [0,3,6],[1,4,7],[2,5,8],
+            [0,4,8],[2,4,6]
+        ];
+        return winPatterns.some(pattern =>
+            pattern.every(i => board[i] === currentPlayer)
+        );
+    }
+
+    resetBtn.addEventListener("click", () => {
+        board = ["", "", "", "", "", "", "", "", ""];
+        currentPlayer = "🌻";
+        document.querySelectorAll(".cell").forEach(c => c.textContent = "");
+    });
+</script>
+
+</body>
+</html>
